@@ -82,7 +82,7 @@ li:hover {
   transition: transform 0.3s, color 0.3s;
 }
 
-#downloadBtn {
+#downloadPdfBtn {
   display: block;
   margin: 30px auto 0;
   padding: 15px 30px;
@@ -97,7 +97,7 @@ li:hover {
   transition: all 0.3s;
 }
 
-#downloadBtn:hover {
+#downloadPdfBtn:hover {
   background: #00cc33;
   transform: scale(1.05);
 }
@@ -150,11 +150,14 @@ li:hover {
     <li style="animation-delay:2.6s;">Exclusion définitive du projet ou du cours : En cas de comportement grave ou répété.</li>
   </ul>
 
-  <button id="downloadBtn">Télécharger en PDF</button>
+  
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
+  const { jsPDF } = window.jspdf;
+
   // Fond matrice
   const canvas = document.getElementById('matrix');
   const ctx = canvas.getContext('2d');
@@ -184,13 +187,19 @@ li:hover {
     canvas.height = window.innerHeight;
   });
 
-  // Télécharger en PDF
-  document.getElementById('downloadBtn').addEventListener('click', () => {
-    html2canvas(document.querySelector('.container')).then(canvas => {
-      const link = document.createElement('a');
-      link.download = 'poster_developpement_digital.png';
-      link.href = canvas.toDataURL();
-      link.click();
+  // Télécharger PDF lisible
+  document.getElementById('downloadPdfBtn').addEventListener('click', () => {
+    const container = document.querySelector('.container');
+    
+    html2canvas(container, { scale: 2 }).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'pt',
+        format: [canvas.width, canvas.height]
+      });
+      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+      pdf.save('poster_developpement_digital.pdf');
     });
   });
 </script>
