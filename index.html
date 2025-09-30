@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poster Développement Digital</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto Mono', monospace;
+  background: black;
+  overflow-x: hidden;
+  color: #00FF41;
+}
+
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 40px;
+  background: rgba(0,0,0,0.85);
+  border: 3px solid #00FF41;
+  border-radius: 20px;
+  box-shadow: 0 0 30px #00FF41;
+}
+
+h1 {
+  text-align: center;
+  font-size: 3em;
+  margin-bottom: 20px;
+  color: #00FF41;
+  text-shadow: 0 0 15px #00FF41;
+  animation: fadeIn 2s ease forwards;
+}
+
+h2 {
+  font-size: 2em;
+  border-bottom: 2px solid #00FF41;
+  padding-bottom: 8px;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  animation: fadeIn 2s ease forwards;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+li {
+  margin: 12px 0;
+  font-size: 1.3em;
+  line-height: 1.5em;
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: slideIn 0.8s forwards;
+}
+
+.rules li::before {
+  content: "⚡ ";
+  color: #00FF41;
+}
+
+.sanctions li::before {
+  content: "⚠️ ";
+  color: #FF4136;
+}
+
+li:hover {
+  color: #FFD700;
+  cursor: pointer;
+  transform: scale(1.05);
+  transition: transform 0.3s, color 0.3s;
+}
+
+#downloadBtn {
+  display: block;
+  margin: 30px auto 0;
+  padding: 15px 30px;
+  font-size: 1.2em;
+  background: #00FF41;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  color: black;
+  font-weight: bold;
+  box-shadow: 0 0 15px #00FF41;
+  transition: all 0.3s;
+}
+
+#downloadBtn:hover {
+  background: #00cc33;
+  transform: scale(1.05);
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes slideIn {
+  from {opacity: 0; transform: translateX(-20px);}
+  to {opacity: 1; transform: translateX(0);}
+}
+
+@media(max-width: 768px){
+  .container {
+    padding: 25px;
+  }
+  h1 { font-size: 2em; }
+  h2 { font-size: 1.5em; }
+  li { font-size: 1.1em; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div class="container">
+  <h1>🎯 Classe Développement Digital – Règles et Sanctions 🎯</h1>
+
+  <h2>Règles de la Classe</h2>
+  <ul class="rules">
+    <li style="animation-delay:0.2s;">Ponctualité : Arriver à l'heure à chaque cours et réunion.</li>
+    <li style="animation-delay:0.4s;">Respect : Respecter les enseignants, les camarades et le matériel.</li>
+    <li style="animation-delay:0.6s;">Participation active : Participer aux projets, discussions et exercices pratiques.</li>
+    <li style="animation-delay:0.8s;">Propreté et ordre : Maintenir l’espace de travail propre et organisé.</li>
+    <li style="animation-delay:1s;">Utilisation responsable des outils numériques.</li>
+    <li style="animation-delay:1.2s;">Communication claire : Toute question ou problème doit être exprimé poliment et clairement.</li>
+    <li style="animation-delay:1.4s;">Respect des deadlines : Remettre les travaux et projets dans les délais fixés.</li>
+    <li style="animation-delay:1.6s;">Collaboration : Travailler en équipe, partager les connaissances et aider les autres.</li>
+  </ul>
+
+  <h2>Sanctions en cas de non-respect</h2>
+  <ul class="sanctions">
+    <li style="animation-delay:1.8s;">Avertissement verbal : Pour un premier manquement mineur.</li>
+    <li style="animation-delay:2s;">Travail supplémentaire : Exercices ou tâches additionnelles pour corriger l’erreur.</li>
+    <li style="animation-delay:2.2s;">Exclusion temporaire : Éloignement de la classe pour des comportements répétés.</li>
+    <li style="animation-delay:2.4s;">Entretien avec le responsable : Discussion formelle pour résoudre le problème.</li>
+    <li style="animation-delay:2.6s;">Exclusion définitive du projet ou du cours : En cas de comportement grave ou répété.</li>
+  </ul>
+
+  <button id="downloadBtn">Télécharger en PDF</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+  // Fond matrice
+  const canvas = document.getElementById('matrix');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const fontSize = 18;
+  const columns = canvas.width / fontSize;
+  const drops = Array.from({length: columns}, () => 1);
+
+  function drawMatrix() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#00FF41';
+    ctx.font = fontSize + "px monospace";
+    for(let i = 0; i < drops.length; i++) {
+      const text = letters.charAt(Math.floor(Math.random() * letters.length));
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+      drops[i]++;
+      if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+    }
+  }
+  setInterval(drawMatrix, 50);
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+
+  // Télécharger en PDF
+  document.getElementById('downloadBtn').addEventListener('click', () => {
+    html2canvas(document.querySelector('.container')).then(canvas => {
+      const link = document.createElement('a');
+      link.download = 'poster_developpement_digital.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    });
+  });
+</script>
+
+</body>
+</html>
