@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto Mono', monospace;
+  background: black;
+  overflow-x: hidden;
+  color: #00FF41;
+}
+
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 40px;
+  background: rgba(0,0,0,0.85);
+  border: 3px solid #00FF41;
+  border-radius: 20px;
+  box-shadow: 0 0 30px #00FF41;
+}
+
+h1 {
+  text-align: center;
+  font-size: 3em;
+  margin-bottom: 20px;
+  color: #00FF41;
+  text-shadow: 0 0 15px #00FF41;
+  animation: fadeIn 2s ease forwards;
+}
+
+h2 {
+  font-size: 2em;
+  border-bottom: 2px solid #00FF41;
+  padding-bottom: 8px;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  animation: fadeIn 2s ease forwards;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+li {
+  margin: 12px 0;
+  font-size: 1.3em;
+  line-height: 1.5em;
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: slideIn 0.8s forwards;
+}
+
+.rules li::before {
+  content: "⚡ ";
+  color: #00FF41;
+}
+
+.sanctions li::before {
+  content: "⚠️ ";
+  color: #FF4136;
+}
+
+li:hover {
+  color: #FFD700;
+  cursor: pointer;
+  transform: scale(1.05);
+  transition: transform 0.3s, color 0.3s;
+}
+
+#downloadPdfBtn {
+  display: block;
+  margin: 30px auto 0;
+  padding: 15px 30px;
+  font-size: 1.2em;
+  background: #00FF41;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  color: black;
+  font-weight: bold;
+  box-shadow: 0 0 15px #00FF41;
+  transition: all 0.3s;
+}
+
+#downloadPdfBtn:hover {
+  background: #00cc33;
+  transform: scale(1.05);
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes slideIn {
+  from {opacity: 0; transform: translateX(-20px);}
+  to {opacity: 1; transform: translateX(0);}
+}
+
+@media(max-width: 768px){
+  .container {
+    padding: 25px;
+  }
+  h1 { font-size: 2em; }
+  h2 { font-size: 1.5em; }
+  li { font-size: 1.1em; }
+}
